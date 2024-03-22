@@ -1,0 +1,1 @@
+本项目准备用于集成coze，将coze中通过agent生成的代码文件上传到git项目中。由于coze生成的代码不能保持，只能尝试通过提供给它plugin的方法，在vercel部署一个serverless接口，接口会以文件内容上传到本项目里，本项目是一个临时实验的项目，用于接受serverless api push过来的文件1111
