@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xxxx.user.dao.UserDao">
+
+    <resultMap id="userResultMap" type="com.xxxx.user.model.UserDO">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="CHAR"/>
+        <result column="status" property="status" jdbcType="CHAR"/>
+        <result column="psw" property="password" jdbcType="VARCHAR"/>
+        <result column="create_datetime" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_datetime" property="updateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="addUser" parameterType="com.xxxx.user.model.UserDO">
+        INSERT INTO uc_user
+        (ID, user_name, gender, status, psw, create_datetime, update_datetime)
+        VALUES
+        (#{user.id,jdbcType=INTEGER}, #{user.userName,jdbcType=VARCHAR}, #{user.gender,jdbcType=CHAR}, #{user.status,jdbcType=CHAR},
+        #{user.password,jdbcType=VARCHAR}, #{user.createDate,jdbcType=TIMESTAMP}, #{user.updateDate,jdbcType=TIMESTAMP})
+    </insert>
+
+    <update id="updateUser" parameterType="com.xxxx.user.model.UserDO">
+        UPDATE uc_user
+        SET user_name = #{user.userName,jdbcType=VARCHAR},
+        psw = #{user.password,jdbcType=VARCHAR},
+        gender = #{user.gender,jdbcType=CHAR}
+        WHERE ID = #{user.id,jdbcType=INTEGER}
+    </update>
+
+    <update id="deleteUser" parameterType="java.lang.Long">
+        UPDATE uc_user
+        SET status = '2'
+        WHERE ID = #{userId,jdbcType=INTEGER}
+    </update>
+
+    <select id="getUser" resultMap="userResultMap">
+        SELECT ID, user_name, gender, status, psw, create_datetime, update_datetime
+        FROM uc_user
+        WHERE
+        <if test="userId != null">ID = #{userId}</if>
+        <if test="userName != null">user_name = #{userName}</if>
+    </select>
+
+</mapper>
