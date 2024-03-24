@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxxx.user.dao.UserDao">
+    <resultMap id="userResultMap" type="com.xxxx.user.model.UserDO">
+        <id property="id" column="ID" jdbcType="INTEGER" />
+        <result property="userName" column="user_name" jdbcType="VARCHAR" />
+        <result property="gender" column="gender" jdbcType="CHAR" />
+        <result property="status" column="status" jdbcType="CHAR" />
+        <result property="psw" column="psw" jdbcType="VARCHAR" />
+        <result property="createDatetime" column="create_datetime" jdbcType="DATETIME" />
+        <result property="updateDatetime" column="update_datetime" jdbcType="DATETIME" />
+    </resultMap>
+    <insert id="createUser" parameterType="com.xxxx.user.model.UserDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO uc_user (user_name, gender, status, psw) VALUES (#{userName}, #{gender}, #{status}, #{psw})
+    </insert>
+    <update id="updateUser" parameterType="com.xxxx.user.model.UserDO">
+        UPDATE uc_user SET user_name = #{userName}, gender = #{gender}, psw = #{psw} WHERE ID = #{id}
+    </update>
+    <update id="deleteUser">
+        UPDATE uc_user SET status = '2' WHERE ID = #{id}
+    </update>
+    <select id="queryUser" resultMap="userResultMap">
+        SELECT * FROM uc_user WHERE ID = #{id} or user_name = #{userName}
+    </select>
+</mapper>
