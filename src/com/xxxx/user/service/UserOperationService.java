@@ -28,13 +28,13 @@ public class UserOperationService implements IUserOperationService {
     */
     @Override
     public AddUserResponse addUser(AddUserRequest request) {
-        // 调用Dao层，检查是否有重复用户
+        // 调用Dao层的查询方法，检查是否有重复用户
         UserDO existingUser = userDao.queryUser(null, request.getUsername());
+        // 如果有重复用户，抛出业务异常
         if (existingUser != null) {
-            // 如果有重复用户，抛出业务异常
             throw new RuntimeException("用户重复添加");
         }
-        // 如果没有重复用户，调用Dao层，添加新用户
+        // 如果没有重复用户，调用Dao层的新增方法，添加新用户
         UserDO newUser = new UserDO();
         newUser.setUserName(request.getUsername());
         newUser.setGender(request.getGender());
@@ -44,41 +44,39 @@ public class UserOperationService implements IUserOperationService {
     }
 
     /**
-    * 删除用户方法
-    * @param request DeleteUserRequest 
-    * @return DeleteUserResponse
-    */
-    @Override
-    public DeleteUserResponse deleteUser(DeleteUserRequest request) {
-        // 调用Dao层，检查用户是否存在和有效
-        UserDO existingUser = userDao.queryUser(Integer.valueOf(request.getUserId()), null);
-        if (existingUser == null || !existingUser.getStatus().equals("1")) {
-            // 如果用户不存在或无效，抛出业务异常
-            throw new RuntimeException("用户不存在");
-        }
-        // 如果用户存在，调用Dao层，删除用户
-        userDao.deleteUser(Integer.valueOf(request.getUserId()));
-        return new DeleteUserResponse(true);
-    }
-
-    /**
     * 更新用户密码方法
     * @param request UpdateUserPasswordRequest
     * @return UpdateUserPasswordResponse
     */
     @Override
     public UpdateUserPasswordResponse updateUserPassword(UpdateUserPasswordRequest request) {
-        // 调用Dao层，检查用户是否存在和有效
-        UserDO existingUser = userDao.queryUser(Integer.valueOf(request.getUserId()), null);
-        if (existingUser == null || !existingUser.getStatus().equals("1")) {
-            // 如果用户不存在或无效，抛出业务异常
+        // 调用Dao层的查询方法，检查用户是否存在且有效
+        UserDO existingUser = userDao.queryUser(request.getUserId(), null);
+        // 如果用户不存在或无效，抛出业务异常
+        if (existingUser == null || !existingUser.getValid()) {
             throw new RuntimeException("用户不存在");
         }
-        // 如果用户存在，加密新密码，调用Dao层，更新用户密码
-        UserDO updateUser = new UserDO();
-        updateUser.setId(existingUser.getId());
-        updateUser.setPsw(DigestUtils.md5Hex(request.getNewPassword()));
-        userDao.updateUser(updateUser);
+        // 如果用户存在，加密入参密码，调用Dao层的修改方法，更新用户密码
+        existingUser.setPassword(DigestUtils.md5Hex(request.getPassword()));
+        userDao.updateUser(existingUser);
         return new UpdateUserPasswordResponse(true);
+    }
+
+    /**
+    * 删除用户方法
+    * @param request DeleteUserRequest
+    * @return DeleteUserResponse
+    */
+    @Override
+    public DeleteUserResponse deleteUser(DeleteUserRequest request) {
+        // 调用Dao层的查询方法，检查用户是否存在且有效
+        UserDO existingUser = userDao.queryUser(request.getUserId(), null);
+        // 如果用户不存在或无效，抛出业务异常
+        if (existingUser == null || !existingUser.getValid()) {
+            throw new RuntimeException("用户不存在");
+        }
+        // 如果用户存在，调用Dao层的删除方法，处理用户状态
+        userDao.deleteUser(request.getUserId());
+        return new DeleteUserResponse(true);
     }
 }
