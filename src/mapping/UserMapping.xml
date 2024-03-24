@@ -10,15 +10,19 @@
         <result property="createDatetime" column="create_datetime" jdbcType="DATETIME" />
         <result property="updateDatetime" column="update_datetime" jdbcType="DATETIME" />
     </resultMap>
+    <!-- DAO-NEW-USER-001 -->
     <insert id="createUser" parameterType="com.xxxx.user.model.UserDO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO uc_user (user_name, gender, status, psw) VALUES (#{userName}, #{gender}, #{status}, #{psw})
     </insert>
+    <!-- DAO-UPDATE-USER-001 -->
     <update id="updateUser" parameterType="com.xxxx.user.model.UserDO">
         UPDATE uc_user SET user_name = #{userName}, gender = #{gender}, psw = #{psw} WHERE ID = #{id}
     </update>
+    <!-- DAO-DEL-USER-001 -->
     <update id="deleteUser">
         UPDATE uc_user SET status = '2' WHERE ID = #{id}
     </update>
+    <!-- DAO-QUERY-USER-001 -->
     <select id="queryUser" resultMap="userResultMap">
         SELECT * FROM uc_user WHERE ID = #{id} or user_name = #{userName}
     </select>
