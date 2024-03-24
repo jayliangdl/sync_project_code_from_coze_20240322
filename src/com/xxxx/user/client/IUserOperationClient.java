@@ -8,16 +8,17 @@ import com.xxxx.user.dto.response.DeleteUserResponse;
 import com.xxxx.user.dto.response.UpdateUserPasswordResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequestMapping("/user")
 public interface IUserOperationClient {
-
-    @PostMapping("/user/add")
+   
+    @PostMapping("/addUser")
     AddUserResponse addUser(@RequestBody AddUserRequest request);
-
-    @PostMapping("/user/delete")
+    
+    @PostMapping("/deleteUser")
     DeleteUserResponse deleteUser(@RequestBody DeleteUserRequest request);
-
-    @PostMapping("/user/updatePassword")
+    
+    @PostMapping("/updateUserPassword")
     UpdateUserPasswordResponse updateUserPassword(@RequestBody UpdateUserPasswordRequest request);
-
 }
