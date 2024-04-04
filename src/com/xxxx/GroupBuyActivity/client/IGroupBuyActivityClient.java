@@ -1,21 +1,23 @@
 package com.xxxx.GroupBuyActivity.client;
 
-import com.xxxx.GroupBuyActivity.dto.request.QueryCustomerOrdersByActivityRequest;
-import com.xxxx.GroupBuyActivity.dto.response.QueryCustomerOrdersByActivityResponse;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.xxxx.GroupBuyActivity.dto.request.*;
+import com.xxxx.GroupBuyActivity.dto.response.*;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.*;
 
-import javax.validation.Valid;
-
-@RequestMapping("/GroupBuyActivity")
-@Validated
+@RequestMapping("/GroupBuyActivity/")
 public interface IGroupBuyActivityClient {
 
-    @PostMapping("/queryCustomerOrdersByActivity")
-    QueryCustomerOrdersByActivityResponse queryCustomerOrdersByActivity(@RequestBody @Valid QueryCustomerOrdersByActivityRequest request);
+	@PostMapping("/checkCustomerActivityOrders")
+	CheckCustomerActivityOrdersResponse checkCustomerActivityOrders(@Validated @RequestBody CheckCustomerActivityOrdersRequest checkCustomerActivityOrdersRequest);
 
-    // TODO: Add other API methods
+	@PostMapping("/queryCustomerGroupBuyRecords")
+	QueryCustomerGroupBuyRecordsResponse queryCustomerGroupBuyRecords(@Validated @RequestBody QueryCustomerGroupBuyRecordsRequest queryCustomerGroupBuyRecordsRequest);
+
+	@PostMapping("/updateGroupBuyInvitation")
+	UpdateGroupBuyInvitationResponse updateGroupBuyInvitation(@Validated @RequestBody UpdateGroupBuyInvitationRequest updateGroupBuyInvitationRequest);
+
+	@PostMapping("/createNotPaidActivityOrder")
+	CreateNotPaidActivityOrderResponse createNotPaidActivityOrder(@Validated @RequestBody CreateNotPaidActivityOrderRequest createNotPaidActivityOrderRequest);
 
 }
